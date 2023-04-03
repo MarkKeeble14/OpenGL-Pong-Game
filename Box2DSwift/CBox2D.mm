@@ -12,8 +12,12 @@ const float MAX_TIMESTEP = 1.0f/60.0f;
 const int NUM_VEL_ITERATIONS = 10;
 const int NUM_POS_ITERATIONS = 3;
 
-
 #pragma mark - Box2D contact listener class
+
+struct CollisionEvent {
+    b2Body* a;
+    b2Body* b;
+};
 
 // This C++ class is used to handle collisions
 class CContactListener : public b2ContactListener
@@ -34,17 +38,67 @@ public:
             b2Body* bodyB = contact->GetFixtureB()->GetBody();
             CBox2D *parentObj = (__bridge CBox2D *)(bodyA->GetUserData());
             
-            /*
+            
             CollisionEvent event;
             event.a = bodyA;
             event.b = bodyB;
             
+            
             // Call RegisterHit (assume CBox2D object is in user data)
-            [parentObj RegisterHit: event];    // assumes RegisterHit is a callback function to register collision
-             */
+            // [parentObj RegisterHit: event];    // assumes RegisterHit is a callback function to register collision
+            RegisterHit(parentObj, event);
+            
         }
     }
     void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse) {};
+    void RegisterHit(CBox2D *parent, CollisionEvent event){
+        
+        auto objList = static_cast<std::map<const char *, b2Body*> *>([parent GetObjectB2Bodies]);
+        
+        // b2Body *theBall = (*objList).find("ball")["ball"];
+        b2Body **theBall = (((*objList).find("ball") == (*objList).end()) ? nullptr : &(*objList)["ball"]);
+        
+        b2Body **thePaddleOne = (((*objList).find("paddleOne") == (*objList).end()) ? nullptr : &(*objList)["paddleOne"]);
+        
+        b2Body **thePaddleTwo = (((*objList).find("paddleTwo") == (*objList).end()) ? nullptr : &(*objList)["paddleTwo"]);
+        
+        b2Body **theGoalRight = (((*objList).find("goalRight") == (*objList).end()) ? nullptr : &(*objList)["goalRight"]);
+        
+        b2Body **theGoalLeft = (((*objList).find("goalLeft") == (*objList).end()) ? nullptr : &(*objList)["goalLeft"]);
+        
+        b2Body **theWallTop = (((*objList).find("wallTop") == (*objList).end()) ? nullptr : &(*objList)["wallTop"]);
+        
+        b2Body **theWallBottom = (((*objList).find("wallBottom") == (*objList).end()) ? nullptr : &(*objList)["wallBottom"]);
+        
+        if (event.b == *theBall) {
+            if (event.a == *thePaddleOne) {
+                printf("Paddle One\n");
+                // ballHitReflectorX = true;
+            }
+            if (event.a == *thePaddleTwo) {
+                printf("Paddle Two\n");
+                // ballHitReflectorX = true;
+            }
+            if (event.a == *theGoalRight) {
+                printf("Goal Right\n");
+                // ballHitGoalRight = true;
+                parent.PlayerOneScored;
+            }
+            if (event.a == *theGoalLeft) {
+                printf("Goal Left\n");
+                // ballHitGoalLeft = true;
+                parent.PlayerTwoScored;
+            }
+            if (event.a == *theWallTop) {
+                printf("Wall Top\n");
+                // ballHitReflectorY = true;
+            }
+            if (event.a == *theWallBottom) {
+                printf("Wall Bottom\n");
+                // ballHitReflectorY = true;
+            }
+        }
+    }
 };
 
 
@@ -67,11 +121,12 @@ public:
     int playerTwoScore;
     
     float paddleSpeed;
-
+    
     // You will also need some extra variables here for the logic
     bool ballHitGoalRight;
     bool ballHitGoalLeft;
-    bool ballLaunched;}
+    bool ballLaunched;
+}
 @end
 
 @implementation CBox2D
@@ -82,6 +137,14 @@ public:
 
 -(int)GetPlayerTwoScore{
     return playerTwoScore;
+}
+
+-(void)PlayerOneScored {
+    ballHitGoalRight = true;
+}
+
+-(void)PlayerTwoScored {
+    ballHitGoalLeft = true;
 }
 
 - (instancetype)init
@@ -317,37 +380,6 @@ public:
         }
     }
 }
-
-/*
--(void)RegisterHit:(CollisionEvent)event{
-    if (event.b == theBall) {
-        if (event.a == thePaddleOne) {
-            printf("Paddle One\n");
-            ballHitReflectorX = true;
-        }
-        if (event.a == thePaddleTwo) {
-            printf("Paddle Two\n");
-            ballHitReflectorX = true;
-        }
-        if (event.a == theGoalRight) {
-            printf("Goal Right\n");
-            ballHitGoalRight = true;
-        }
-        if (event.a == theGoalLeft) {
-            printf("Goal Left\n");
-            ballHitGoalLeft = true;
-        }
-        if (event.a == theWallTop) {
-            printf("Wall Top\n");
-            ballHitReflectorY = true;
-        }
-        if (event.a == theWallBottom) {
-            printf("Wall Bottom\n");
-            ballHitReflectorY = true;
-        }
-    }
-}
-*/
  
 -(void)LaunchBall
 {
@@ -387,6 +419,25 @@ public:
     if (theWallBottom)
         (*objPosList)["wallBottom"] = theWallBottom->GetPosition();
     return reinterpret_cast<void *>(objPosList);
+}
+
+-(void *)GetObjectB2Bodies{
+    auto *objList = new std::map<const char *,b2Body*>;
+    if (theBall)
+        (*objList)["ball"] = theBall;
+    if (thePaddleOne)
+        (*objList)["paddleOne"] = thePaddleOne;
+    if (thePaddleTwo)
+        (*objList)["paddleTwo"] = thePaddleTwo;
+    if (theGoalRight)
+        (*objList)["goalRight"] = theGoalRight;
+    if (theGoalLeft)
+        (*objList)["goalLeft"] = theGoalLeft;
+    if (theWallTop)
+        (*objList)["wallTop"] = theWallTop;
+    if (theWallBottom)
+        (*objList)["wallBottom"] = theWallBottom;
+    return reinterpret_cast<void *>(objList);
 }
 
 -(void)HelloWorld

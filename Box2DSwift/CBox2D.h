@@ -47,14 +47,7 @@
 #define BALL_RADIUS            15.0f
 #define BALL_SPHERE_SEGS    128
 
-/*
-struct CollisionEvent {
-    b2Body* a;
-    b2Body* b;
-}
- */
-
-@interface CBox2D : NSObject 
+@interface CBox2D : NSObject
 
 -(void) HelloWorld; // Basic Hello World! example from Box2D
 
@@ -64,8 +57,11 @@ struct CollisionEvent {
 -(int) GetPlayerOneScore;
 -(int) GetPlayerTwoScore;
 -(void) Update:(float)elapsedTime;  // update the Box2D engine
-// -(void) RegisterHit:(CollisionEvent)event;
 -(void *)GetObjectPositions;        // Get the positions of the ball and brick
+-(void *)GetObjectB2Bodies;
+
+-(void)PlayerOneScored;
+-(void)PlayerTwoScored;
 
 @end
 
