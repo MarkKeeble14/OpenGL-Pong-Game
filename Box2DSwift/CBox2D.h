@@ -61,6 +61,8 @@ struct CollisionEvent {
 -(void) LaunchBall;                 // launch the ball
 -(void) MovePaddleRight:(float)amount;
 -(void) MovePaddleLeft:(float)amount;
+-(int) GetPlayerOneScore;
+-(int) GetPlayerTwoScore;
 -(void) Update:(float)elapsedTime;  // update the Box2D engine
 //-(void) RegisterHit:(CollisionEvent)event;
 -(void *)GetObjectPositions;        // Get the positions of the ball and brick

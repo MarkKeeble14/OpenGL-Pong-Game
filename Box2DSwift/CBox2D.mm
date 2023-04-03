@@ -78,6 +78,14 @@ public:
 
 @implementation CBox2D
 
+- (int)GetPlayerOneScore{
+    return playerOneScore;
+}
+
+-(int)GetPlayerTwoScore{
+    return playerTwoScore;
+}
+
 - (instancetype)init
 {
     self = [super init];
