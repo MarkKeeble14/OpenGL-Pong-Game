@@ -34,14 +34,14 @@ public:
             b2Body* bodyB = contact->GetFixtureB()->GetBody();
             CBox2D *parentObj = (__bridge CBox2D *)(bodyA->GetUserData());
             
-            /*
+            
             CollisionEvent event;
             event.a = bodyA;
             event.b = bodyB;
             
             // Call RegisterHit (assume CBox2D object is in user data)
             [parentObj RegisterHit: event];    // assumes RegisterHit is a callback function to register collision
-             */
+             
         }
     }
     void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse) {};
@@ -338,8 +338,8 @@ public:
     }
 }
 
-/*
--(void)RegisterContact:(CollisionEvent)event{
+
+-(void)RegisterHit:(CollisionEvent)event{
     if (event.b == theBall) {
         if (event.a == thePaddleOne) {
             printf("Paddle One\n");
@@ -367,7 +367,7 @@ public:
         }
     }
 }
-*/
+
  
 -(void)LaunchBall
 {

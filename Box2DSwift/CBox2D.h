@@ -8,6 +8,8 @@
 #import <UIKit/UIKit.h>
 #import <GLKit/GLKit.h>
 
+#include <Box2D/Box2D.h>
+
 // Set up brick and ball physics parameters here:
 //   position, width+height (or radius), velocity,
 //   and how long to wait before dropping brick
@@ -47,12 +49,11 @@
 #define BALL_RADIUS            15.0f
 #define BALL_SPHERE_SEGS    128
 
-/*
+
 struct CollisionEvent {
     b2Body* a;
     b2Body* b;
 };
- */
 
 @interface CBox2D : NSObject 
 
@@ -64,7 +65,7 @@ struct CollisionEvent {
 -(int) GetPlayerOneScore;
 -(int) GetPlayerTwoScore;
 -(void) Update:(float)elapsedTime;  // update the Box2D engine
-//-(void) RegisterHit:(CollisionEvent)event;
+-(void) RegisterHit:(CollisionEvent)event;
 -(void *)GetObjectPositions;        // Get the positions of the ball and brick
 
 @end
