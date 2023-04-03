@@ -34,14 +34,14 @@ public:
             b2Body* bodyB = contact->GetFixtureB()->GetBody();
             CBox2D *parentObj = (__bridge CBox2D *)(bodyA->GetUserData());
             
-            
+            /*
             CollisionEvent event;
             event.a = bodyA;
             event.b = bodyB;
             
             // Call RegisterHit (assume CBox2D object is in user data)
             [parentObj RegisterHit: event];    // assumes RegisterHit is a callback function to register collision
-             
+             */
         }
     }
     void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse) {};
@@ -69,8 +69,6 @@ public:
     float paddleSpeed;
 
     // You will also need some extra variables here for the logic
-    bool ballHitReflectorX;
-    bool ballHitReflectorY;
     bool ballHitGoalRight;
     bool ballHitGoalLeft;
     bool ballLaunched;}
@@ -104,7 +102,7 @@ public:
         world->SetContactListener(contactListener);
         
         // Set Paddle Speed
-        paddleSpeed = 250.0f;
+        paddleSpeed = 10000.0f;
         
         // Set up the brick and ball objects for Box2D
         // Paddle One
@@ -237,12 +235,10 @@ public:
             circleFixtureDef.shape = &circle;
             circleFixtureDef.density = 1.0f;
             circleFixtureDef.friction = 0.3f;
-            circleFixtureDef.restitution = 1.0f;
+            circleFixtureDef.restitution = 10.0f;
             theBall->CreateFixture(&circleFixtureDef);
         }
         totalElapsedTime = 0;
-        ballHitReflectorX = false;
-        ballHitReflectorY = false;
         ballHitGoalLeft = false;
         ballHitGoalRight = false;
         ballLaunched = false;
@@ -264,11 +260,11 @@ public:
     //  and if so, use ApplyLinearImpulse() and SetActive(true)
     if (ballLaunched)
     {
-        float min = 500000.0f;
-        float max = 1000000.0f;
+        float min = 5000000.0f;
+        float max = 10000000.0f;
         float diff = min - max;
         float yVelocity = (((float) (arc4random() % ((unsigned)RAND_MAX + 1)) / RAND_MAX) * diff) + min;
-        float xVelocity = (((float) (arc4random() % ((unsigned)RAND_MAX + 1)) / RAND_MAX) * diff) + max / 2;
+        float xVelocity = max;
         
         b2Vec2 startVelocity = b2Vec2(xVelocity, yVelocity);
         theBall->ApplyLinearImpulse(startVelocity, theBall->GetPosition(), true);
@@ -282,22 +278,6 @@ public:
     // Check if it is time yet to drop the brick, and if so
     //  call SetAwake()
     totalElapsedTime += elapsedTime;
-    
-    // If the last collision hit a reflector, invert its velocity
-    if (ballHitReflectorX)
-    {
-        // theBall->SetLinearVelocity(b2Vec2(-theBall->GetLinearVelocity().x, theBall->GetLinearVelocity().y));
-        //theBall->SetTransform(b2Vec2(theBall->GetPosition().x - 5, theBall->GetPosition().y), 0);
-        // theBall->SetAngularVelocity(0);
-        ballHitReflectorX = false;
-    }
-    
-    if (ballHitReflectorY)
-    {
-        // theBall->SetLinearVelocity(b2Vec2(theBall->GetLinearVelocity().x, -theBall->GetLinearVelocity().y));
-        //theBall->SetTransform(b2Vec2(theBall->GetPosition().x, theBall->GetPosition().y - 50), 0);        // theBall->SetAngularVelocity(0);
-        ballHitReflectorY = false;
-    }
     
     if (ballHitGoalLeft) {
         // Add One to Score
@@ -338,7 +318,7 @@ public:
     }
 }
 
-
+/*
 -(void)RegisterHit:(CollisionEvent)event{
     if (event.b == theBall) {
         if (event.a == thePaddleOne) {
@@ -367,7 +347,7 @@ public:
         }
     }
 }
-
+*/
  
 -(void)LaunchBall
 {

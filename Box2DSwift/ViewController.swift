@@ -36,7 +36,7 @@ class ViewController: GLKViewController {
         setupGL();
         
         let singleTap = UITapGestureRecognizer(target: self, action: #selector(self.doSingleTap(_:)))
-        singleTap.numberOfTapsRequired = 1
+        singleTap.numberOfTapsRequired = 2
         view.addGestureRecognizer(singleTap);
         
         let pan = UIPanGestureRecognizer(target: self, action: #selector(self.doPan(_:)));
@@ -47,7 +47,7 @@ class ViewController: GLKViewController {
         p1ScoreText = UITextView();
         p1ScoreText?.isSelectable = false;
         p1ScoreText?.isEditable = false;
-        p1ScoreText?.backgroundColor = UIColor.blue;
+        p1ScoreText?.backgroundColor = UIColor.clear;
         p1ScoreText?.textColor = UIColor.white;
         p1ScoreText?.frame = CGRect(x: 50, y: 50, width: 100, height: 100);
         p1ScoreText?.textAlignment = NSTextAlignment.center;
@@ -58,7 +58,7 @@ class ViewController: GLKViewController {
         p2ScoreText = UITextView();
         p2ScoreText?.isSelectable = false;
         p2ScoreText?.isEditable = false;
-        p2ScoreText?.backgroundColor = UIColor.red;
+        p2ScoreText?.backgroundColor = UIColor.clear;
         p2ScoreText?.textColor = UIColor.white;
         p2ScoreText?.frame = CGRect(x: 250, y: 50, width: 100, height: 100);
         p2ScoreText?.textAlignment = NSTextAlignment.center;
@@ -80,9 +80,15 @@ class ViewController: GLKViewController {
         if (position.x < 200) {
             glesRenderer.box2d.movePaddleLeft(-velocity.y);
             // Move Left Paddle
+            if (sender.state == UIGestureRecognizer.State.ended) {
+                glesRenderer.box2d.movePaddleLeft(0);
+            }
         } else {
-            glesRenderer.box2d.movePaddleRight(-velocity.y);
             // Move Right Paddle
+            glesRenderer.box2d.movePaddleRight(-velocity.y);
+            if (sender.state == UIGestureRecognizer.State.ended) {
+                glesRenderer.box2d.movePaddleRight(0);
+            }
         }
     }
 }
