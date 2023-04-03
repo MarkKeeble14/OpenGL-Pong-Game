@@ -31,9 +31,17 @@ public:
         {
             // Use contact->GetFixtureA()->GetBody() to get the body
             b2Body* bodyA = contact->GetFixtureA()->GetBody();
+            b2Body* bodyB = contact->GetFixtureB()->GetBody();
             CBox2D *parentObj = (__bridge CBox2D *)(bodyA->GetUserData());
+            
+            /*
+            CollisionEvent event;
+            event.a = bodyA;
+            event.b = bodyB;
+            
             // Call RegisterHit (assume CBox2D object is in user data)
-            // [parentObj RegisterHit];    // assumes RegisterHit is a callback function to register collision
+            [parentObj RegisterHit: event];    // assumes RegisterHit is a callback function to register collision
+             */
         }
     }
     void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse) {};
@@ -322,6 +330,37 @@ public:
     }
 }
 
+/*
+-(void)RegisterContact:(CollisionEvent)event{
+    if (event.b == theBall) {
+        if (event.a == thePaddleOne) {
+            printf("Paddle One\n");
+            ballHitReflectorX = true;
+        }
+        if (event.a == thePaddleTwo) {
+            printf("Paddle Two\n");
+            ballHitReflectorX = true;
+        }
+        if (event.a == theGoalRight) {
+            printf("Goal Right\n");
+            ballHitGoalRight = true;
+        }
+        if (event.a == theGoalLeft) {
+            printf("Goal Left\n");
+            ballHitGoalLeft = true;
+        }
+        if (event.a == theWallTop) {
+            printf("Wall Top\n");
+            ballHitReflectorY = true;
+        }
+        if (event.a == theWallBottom) {
+            printf("Wall Bottom\n");
+            ballHitReflectorY = true;
+        }
+    }
+}
+*/
+ 
 -(void)LaunchBall
 {
     printf("Ball Launched\n");
