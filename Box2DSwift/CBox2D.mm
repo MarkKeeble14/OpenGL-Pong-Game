@@ -73,29 +73,23 @@ public:
         if (event.b == *theBall) {
             if (event.a == *thePaddleOne) {
                 printf("Paddle One\n");
-                // ballHitReflectorX = true;
             }
             if (event.a == *thePaddleTwo) {
                 printf("Paddle Two\n");
-                // ballHitReflectorX = true;
             }
             if (event.a == *theGoalRight) {
                 printf("Goal Right\n");
-                // ballHitGoalRight = true;
                 parent.PlayerOneScored;
             }
             if (event.a == *theGoalLeft) {
                 printf("Goal Left\n");
-                // ballHitGoalLeft = true;
                 parent.PlayerTwoScored;
             }
             if (event.a == *theWallTop) {
                 printf("Wall Top\n");
-                // ballHitReflectorY = true;
             }
             if (event.a == *theWallBottom) {
                 printf("Wall Bottom\n");
-                // ballHitReflectorY = true;
             }
         }
     }
@@ -323,8 +317,8 @@ public:
     //  and if so, use ApplyLinearImpulse() and SetActive(true)
     if (ballLaunched)
     {
-        float min = 5000000.0f;
-        float max = 10000000.0f;
+        float min = 10000.0f;
+        float max = 50000.0f;
         float diff = min - max;
         float yVelocity = (((float) (arc4random() % ((unsigned)RAND_MAX + 1)) / RAND_MAX) * diff) + min;
         float xVelocity = max;
@@ -332,9 +326,8 @@ public:
         b2Vec2 startVelocity = b2Vec2(xVelocity, yVelocity);
         theBall->ApplyLinearImpulse(startVelocity, theBall->GetPosition(), true);
         theBall->SetActive(true);
-#ifdef LOG_TO_CONSOLE
-        NSLog(@"Applying impulse %f to ball\n", BALL_VELOCITY);
-#endif
+
+        NSLog(@"Applying impulse %f %f to ball\n", xVelocity, yVelocity);
         ballLaunched = false;
     }
     

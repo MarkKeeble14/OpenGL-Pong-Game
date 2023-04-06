@@ -44,7 +44,7 @@
 
 #define BALL_POS_X            425
 #define BALL_POS_Y            300
-#define BALL_RADIUS            15.0f
+#define BALL_RADIUS            5.0f
 #define BALL_SPHERE_SEGS    128
 
 @interface CBox2D : NSObject

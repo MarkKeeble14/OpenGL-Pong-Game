@@ -356,7 +356,7 @@ enum
         for (int n=0; n<=BALL_SPHERE_SEGS; n++)
         {
             float const t = 2*M_PI*(float)n/(float)BALL_SPHERE_SEGS;
-            vertPos[k++] = theBall->x + sin(t)*BALL_RADIUS;
+            vertPos[k++] = theBall->x + M_PI * sin(t)*BALL_RADIUS;
             vertPos[k++] = theBall->y + cos(t)*BALL_RADIUS;
             vertPos[k++] = 0;
             numBallVerts++;
